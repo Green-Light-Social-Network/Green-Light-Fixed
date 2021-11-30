@@ -14,6 +14,106 @@
     {{ url_for('new_post') }}" class=" button is-success is-rounded">New Post</a>
 <hr>
 
+<div style="width: 80rem; display: flex;">
+    <div
+        style="width: 50%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+        <h2 class="subtitle is-3" style="text-align: center; display: inline-block;">Post History</h2>
+        <div style="width: 80%;">
+            {% for post in posts|reverse %}
 
+
+            {% include "includes/_post.html" %}
+
+            {% endfor %}
+        </div>
+    </div>
+    <div
+        style="width: 50%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+        <h2 class="subtitle is-3" style="text-align: center; display: inline-block;">Following</h2>
+        {% for suggestion in follow_history %}
+        <div style="background-color: white; width: 40%; border-radius: .5rem;">
+            <div
+                style="margin-top: 2px; margin-bottom: 2px; display: flex; height: 6rem; justify-content: space-evenly; align-items: center;">
+                <div>
+                    <img src="{{ url_for('static', filename='profile_pics/' + suggestion.image_file) }}"
+                        alt="{{ suggestion.username }}" class="profile" width="60">
+                </div>
+                <div>
+                    <h2 class="title is-6 has-text-black">{{ suggestion.username }}</h2>
+                </div>
+                <div>
+                    {% if user in suggestion.followers.all() %}
+                    <a href="{{ url_for('unfollow', id=suggestion.id) }}">
+                        <div class="box icon has-background-light is-small">
+                            <i class="fas fa-user-minus has-text-danger"></i>
+                        </div>
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% if suggestion != follow_history[-1]%}
+        <hr class="is-marginless">
+        {% endif %}
+        {% endfor %}
+    </div>
+
+</div>
+
+
+
+
+<!-- 
+<div class="columns">
+    <div class="column is-two-thirds">
+        <div class="level is-hidden-touch">
+            <div class="level-left">
+                <h2 class="subtitle is-3">Post History</h2>
+            </div>
+            <div class="level-right">
+                <h6 class="subtitle is-3">Following</h6>
+            </div>
+        </div>
+        <div class="level-left"> 
+            <div class="column is-two-thirds">
+                    
+            </div>
+        </div>
+    </div>
+    <div class ="column is-three-fifths">
+        <div class="wrap" style=""></div>
+            <div class="level is-hidden-touch">
+                <div class="level-right">
+                        <div class="box">
+                            {% for suggestion in follow_history %}
+                            <div class="columns is-centered" style="margin-top: 2px; margin-bottom: 2px;">
+                                <div class="column is-one-third">
+                                    <img src="{{ url_for('static', filename='profile_pics/' + suggestion.image_file) }}"
+                                        alt="{{ suggestion.username }}" class="profile" width="60">
+                                </div>
+                                <div class="column">
+                                    <h2 class="title is-6 has-text-black">{{ suggestion.username }}</h2>
+                                </div>
+                                <div class="column is-one-quarter">
+                                    {% if user in suggestion.followers.all() %}
+                                    <a href="{{ url_for('unfollow', id=suggestion.id) }}">
+                                        <div class="box icon has-background-light is-small">
+                                            <i class="fas fa-user-minus has-text-danger"></i>
+                                        </div>
+                                    </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% if suggestion != follow_history[-1]%}
+                            <hr class="is-marginless">
+                            {% endif %}
+
+                            {% endfor %}
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> -->
 
 {% endblock %}

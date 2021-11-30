@@ -351,7 +351,7 @@ def profile():
         if current_user() in follow_history:  # If the current user is in the user's follow suggestions
             follow_history.remove(current_user())
     
-    return render_template('profile.html', profile_pic=profile_pic, posts=posts, Post_model=Post, user=current_user())
+    return render_template('profile.html', profile_pic=profile_pic, posts=posts, Post_model=Post, user=current_user(), follow_history=follow_history)
 
 
 # Post form class
