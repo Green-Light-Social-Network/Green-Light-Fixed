@@ -1,0 +1,104 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+  
+<form style="width: 70vw; height: 90vh; display: inline-block; display: flex; border-radius: 1rem; background-color: whitesmoke;" action="" method="POST">
+<!-- This is gonna be the left part with the chats -->
+  <div style="width: 25%; height: 100%; display: flex; flex-direction: column;">
+    <div style="display: flex; justify-content: space-around; align-items: center;">
+      <h1 style="text-align: center; font-size: 2rem; font-weight: 700; margin: 2rem; display: inline;">Chats</h1>
+      <a href="/messages"><div style="background-color: #3E4042; border-radius: .5rem; padding: .6rem .5rem .2rem .4rem;"> 
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill=white class="bi bi-send-plus" viewBox="0 0 16 16">
+            <path d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855a.75.75 0 0 0-.124 1.329l4.995 3.178 1.531 2.406a.5.5 0 0 0 .844-.536L6.637 10.07l7.494-7.494-1.895 4.738a.5.5 0 1 0 .928.372l2.8-7Zm-2.54 1.183L5.93 9.363 1.591 6.602l11.833-4.733Z"/>
+            <path d="M16 12.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Zm-3.5-2a.5.5 0 0 0-.5.5v1h-1a.5.5 0 0 0 0 1h1v1a.5.5 0 0 0 1 0v-1h1a.5.5 0 0 0 0-1h-1v-1a.5.5 0 0 0-.5-.5Z"/>
+          </svg>
+      </div></a>
+      
+    </div>
+    {% for chats in myChats%}
+      {% set user1Searched = allUser.query.filter_by(id=chats.user1).first() %}
+      {% set user2Searched = allUser.query.filter_by(id=chats.user2).first() %}
+      {% if myUser.id == user1Searched.id%}
+        <a href="/messages/{{ chats.id }}"><div style="display: flex; justify-content: flex-start; align-items: center; padding-top: 1rem; padding-bottom: 1rem; background-color: #3E4042; ">
+          <p class="image is-64x64" style="margin-left: .5rem;">
+              {% set profile_pic = url_for('static', filename='profile_pics/' + user2Searched.image_file) %}
+              <img src="{{ profile_pic }}" style="width: 64px; height: 64px;" class="profile">
+          </p>
+          <p style="margin-left: 2rem; color: white;"> {{ user2Searched.username }}</p> 
+        </div></a>
+      {% else %}
+        <a href="/messages/{{ chats.id }}"><div style="display: flex; justify-content: flex-start; align-items: center; padding-top: 1rem; padding-bottom: 1rem; background-color: #3E4042;">
+          <p class="image is-64x64" style="margin-left: .5rem;">
+              {% set profile_pic = url_for('static', filename='profile_pics/' + user1Searched.image_file) %}
+              <img src="{{ profile_pic }}" style="width: 64px; height: 64px;" class="profile">
+          </p>
+          <p style="margin-left: 2rem; color: white;"> {{ user1Searched.username }}</p> 
+        </div></a>
+      {% endif %}
+    {% endfor %}
+    
+
+
+  </div>
+
+<!-- This is gonna be where the messages are gonna be display-->
+
+  <div style="height: 100%; width: 100%; background-color: #242526; display: flex; flex-direction: column;">
+    <div style="background-color: #3E4042; width: 100%; height: 5rem; display: flex; align-items: center;">
+      {% if version %}
+        <p class="image is-64x64" style="margin-left: 2rem; margin-top: 1rem;" >
+          {% set profile_pic = url_for('static', filename='profile_pics/' + otherUser.image_file) %}
+          <img src="{{ profile_pic }}" style="width: 3rem; height: 3rem;" class="profile">
+        </p>
+        <p style="margin-left: 2rem; color: white;">
+          {{ otherUser.username}}
+        </p>
+      {% else %}
+        <p style="color: white; margin-left: 2rem; margin-right: 2rem;"> To: </p>
+        <input type="text" name="userSend" value="{{request.form.userSend}}" style="border-radius: .5rem; height: 2rem; width: 20rem;"> 
+      {% endif %}
+    </div>
+    {% if error %}
+      <div style="width: 100%; height: 3rem; background-color: #0084FF;">
+      <p style="color: #242526; text-align: center; font-family: Arial, Helvetica, sans-serif; padding-top: .5rem;">The user doesn't exist</p>
+      </div>
+    {% endif  %}
+    {% if send %}
+      <div style="width: 100%; height: 3rem; background-color: #22C65B;">
+      <p style="color: #242526; text-align: center; font-family: Arial, Helvetica, sans-serif; padding-top: .5rem;">The message has been sent!</p>
+      </div>
+    {% endif  %}
+    <div style="width: 100%; height: 100%; overflow-y: auto; display: flex; flex-direction: column-reverse;">
+      {% if version %}
+        {% for mex in chatChos.messages|reverse %}
+            {% if mex.sender_id == myUser.id%}
+              <div style="display: inline-block; width: 100%; min-height: 4.5rem; display: flex; flex-direction: row-reverse; align-items: center;">
+                <div style="min-height: 4rem; background-color: #0084FF; max-width: 40rem; margin-right: 2rem; border-radius: 2rem; margin-bottom: .2rem;">
+                  <p style="color: white; padding: 1rem 1.5rem .1rem 1.5rem;">
+                    {{ mex.body }}
+                  </p>
+                </div>
+              </div>
+            {% else %}
+              <div style="display: inline-block; width: 100%; min-height: 4.5rem; display: flex; align-items: center;">
+                <div style="min-height: 4rem; background-color: #3A3B3C; max-width: 40rem; margin-left: 2rem; border-radius: 2rem; margin-bottom: .2rem;">
+                  <p style="color: white; padding: 1rem 1.5rem .1rem 1.5rem;">
+                    {{ mex.body }}
+                  </p>
+                </div>
+              </div>
+            {% endif %}
+        {% endfor %}
+      {% endif %}
+    </div>
+    <div style="width: 100%; min-height: 6%;background-color: #3A3B3C; align-self: flex-end; display: flex;">
+      <input type="text" name="mess" style=" font-family:Arial;width: 90%; height: 2rem; margin-left: 1rem; align-self: center; border-radius: .5rem;">
+      <button type="submit" class="button is-success" style="font-family:Arial;width: 4rem; align-self: center; margin-left: .8rem;">Send</button>
+    <div>
+  </div>
+
+    
+  
+</form>
+  
+{% endblock  %}

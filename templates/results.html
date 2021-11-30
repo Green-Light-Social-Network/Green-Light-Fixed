@@ -1,0 +1,69 @@
+{% extends 'layout.html' %}
+{% block body %}
+
+<div class="columns is-centered">
+    <div class="column is-half">
+        <div class="level is-hidden-touch">
+            <div class="level-left">
+                <h2 class="title is-2">Results</h2>
+            </div>
+            <div class="level-right">
+                <h6 class="subtitle is-5" style="margin: .4rem 7.5rem 0 0;">Containing: {{query}}</h6>
+
+            </div>
+        </div>
+
+        {% for userF in User_model%}
+            {% if user.id != userF.id  %}
+                <div class="box">
+                    <div class="columns is-vcentered" style="margin-top: 2px; margin-bottom: 2px;">
+                        <div class="column is-one-third">
+                            <img src="{{ url_for('static', filename='profile_pics/' + userF.image_file) }}"
+                                alt="{{ userF.username }}" class="profile" width="60">
+                        </div>
+                        <div class="column">
+                            <h2 class="title is-6 has-text-black">{{ userF.username }}</h2>
+                        </div>
+                        <div class="column is-one-quarter">
+                            {% if user in userF.followers.all() %}
+                            <a href="{{ url_for('unfollow', id=userF.id) }}">
+                                <div class="box icon has-background-light is-small">
+                                    <i class="fas fa-user-minus has-text-danger"></i>
+                                </div>
+                            </a>
+                            {% else %}
+                            <a href="{{ url_for('follow', id=userF.id) }}">
+                                <div class="box has-background-success icon is-small">
+                                    <i class="fas fa-user-plus has-text-black"></i>
+                                </div>
+                            </a>
+                            {% endif %}
+
+                        </div>
+                    </div>
+                    {% if suggestion != follow_suggestions[-1] %}
+                        <hr class="is-marginless">
+                    {% endif %}
+                </div>
+            {% endif %}
+        {% endfor %}
+        {% for post in posts|reverse %}
+
+
+        {% include "includes/_post.html" %}
+
+        {% endfor %}
+
+    </div>
+</div>
+
+
+
+{% endblock %}
+
+
+<ul>
+    {% for post in posts %}
+    <li>{{ post }}</li>
+    {% endfor %}
+</ul>

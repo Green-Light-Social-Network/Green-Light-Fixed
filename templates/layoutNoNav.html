@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html style="background-color: #dde4e9;">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Green Light</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='graphics/' + 'greenlightlogo.png') }}"
+        type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.4/css/bulma.min.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+    {% block head %}{% endblock %}
+</head>
+
+<body class="has-navbar-fixed-top">
+
+
+    
+{% block body %}{% endblock body %}
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.min.js"></script>
+    
+</body>
+
+</html>

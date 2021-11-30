@@ -1,0 +1,48 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+
+{% for user_query in user.all()|reverse %}
+{% set userCommented = dbUser.query.filter_by(id=user_query.user_C).first() %}
+    {% if userCommented.id != myUser.id%}
+        {% if user_query.typeAct == 4 %}
+            <a href="/messages/{{ user_query.postId }}" style="display: block; margin-bottom: 1rem;" class="has-text-dark">
+        {% else %}
+            <a href="/post/{{ user_query.postId }}" style="display: block; margin-bottom: 1rem;" class="has-text-dark">
+        {% endif %}        
+                <div class="box" id="">
+                    <article class="media">
+                        <figure class="media-left">
+                            <p class="image is-64x64">
+                                {% set profile_pic = url_for('static', filename='profile_pics/' + userCommented.image_file) %}
+                                <img src="{{ profile_pic }}" style="width: 64px; height: 64px;" class="profile">
+                            </p>
+                        </figure>
+                        <div class="media-content">
+                            <div class="content">
+                                <p style="margin-bottom: .8rem;">
+                                    <small class="has-text-weight-semibold">
+                                        {{ user_query.date_posted.strftime('%B %d, %Y') }}
+                                    </small>
+                                    <p style="margin-bottom: .1rem;">
+                                        {% if user_query.typeAct == 1 %}
+                                            <strong class="has-text-success">{{ userCommented.username }}</strong> commented in your post
+                                        {% elif user_query.typeAct == 2 %}
+                                            <strong class="has-text-success">{{ userCommented.username }}</strong> liked your post
+                                        {% elif user_query.typeAct == 3 %}
+                                        <strong class="has-text-success">{{ userCommented.username }}</strong> retwitted your post
+                                        {% elif user_query.typeAct == 4 %}
+                                        <strong class="has-text-success">{{ userCommented.username }}</strong> send you a message
+                                        {% endif %}
+                                    </p>
+                                    <br>
+                                </p>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </a>
+    {% endif %}
+{% endfor %}
+
+{% endblock %}

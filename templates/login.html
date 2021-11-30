@@ -1,0 +1,31 @@
+{% extends 'layoutNoNav.html' %}
+#displays login/sign up process on front page
+{% block body %}
+<div style="display: flex; flex-direction: column; align-items: center;">
+    <a style="width: 8rem;" href="{{ url_for('login')}}">
+        <img src="{{ url_for('static', filename='graphics/' + 'logo4.png') }}" alt="">
+    </a>
+    <div style="background-color: white; display: flex; flex-direction: column; align-items: center; margin-top: 3rem; padding: 6rem; border-radius: 2rem;">
+        <h1 class="title is-1" style="text-align: center; display: inline-block; ">Login</h1>
+        {% if error is defined%}
+        <p style="font-size: 1rem; color: white; display: inline-block; width: 20rem; padding: .5rem; background-color: #1D9BF0; text-align: center; border-radius: .5rem;">{{error}} !</p>
+        {% endif  %}
+        <form action="" method="POST" style="width: 20rem; margin-top: 2rem; display: flex; flex-direction: column;">
+            <div class="control" style="margin-bottom: 1.5rem;">
+                <label for="email">Email</label>
+                <input type="text" name="email" class="input" value="{{request.form.email}}">
+            </div>
+            <div class="control" style="">
+                <label for="password">Password</label>
+                <input type="password" name="password" class="input" value="{{request.form.password}}">
+            </div>
+            <a href="{{ url_for('forgotpassword') }}" style="font-size: .8rem; text-align: left; margin-top: .5rem; margin-bottom: 3rem;">Forgot Password?</a>
+            <button type="submit" class="button is-success" style="width: 8rem; align-self: center;">Submit</button>
+            <p style="font-size: .8rem; margin-top: 3rem; text-align: center;"> Don’t have an account? <a href="{{ url_for('register') }}">Sign up</a></p>
+            
+        </form>
+    </div>
+
+</div>
+
+{% endblock %}
